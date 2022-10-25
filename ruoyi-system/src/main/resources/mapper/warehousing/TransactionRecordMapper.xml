@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.warehousing.mapper.TransactionRecordMapper">
+    
+    <resultMap type="TransactionRecord" id="TransactionRecordResult">
+        <result property="trId"    column="tr_id"    />
+        <result property="cId"    column="c_id"    />
+        <result property="mId"    column="m_id"    />
+        <result property="tId"    column="t_id"    />
+        <result property="amount"    column="amount"    />
+        <result property="tDate"    column="t_date"    />
+        <result property="unit"    column="unit"    />
+        <result property="color"    column="color"    />
+        <result property="inOrOut"    column="in_or_out"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTransactionRecordVo">
+        select tr_id, c_id, m_id, t_id, amount, t_date, unit, color, in_or_out, create_by, create_time, update_by, update_time, remark from transaction_record
+    </sql>
+
+    <select id="selectTransactionRecordList" parameterType="TransactionRecord" resultMap="TransactionRecordResult">
+        <include refid="selectTransactionRecordVo"/>
+        <where>  
+            <if test="cId != null "> and c_id = #{cId}</if>
+            <if test="mId != null "> and m_id = #{mId}</if>
+            <if test="tId != null "> and t_id = #{tId}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="tDate != null "> and t_date = #{tDate}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="color != null  and color != ''"> and color = #{color}</if>
+            <if test="inOrOut != null "> and in_or_out = #{inOrOut}</if>
+        </where>
+    </select>
+    
+    <select id="selectTransactionRecordByTrId" parameterType="Long" resultMap="TransactionRecordResult">
+        <include refid="selectTransactionRecordVo"/>
+        where tr_id = #{trId}
+    </select>
+        
+    <insert id="insertTransactionRecord" parameterType="TransactionRecord" useGeneratedKeys="true" keyProperty="trId">
+        insert into transaction_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cId != null">c_id,</if>
+            <if test="mId != null">m_id,</if>
+            <if test="tId != null">t_id,</if>
+            <if test="amount != null">amount,</if>
+            <if test="tDate != null">t_date,</if>
+            <if test="unit != null">unit,</if>
+            <if test="color != null">color,</if>
+            <if test="inOrOut != null">in_or_out,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cId != null">#{cId},</if>
+            <if test="mId != null">#{mId},</if>
+            <if test="tId != null">#{tId},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="tDate != null">#{tDate},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="color != null">#{color},</if>
+            <if test="inOrOut != null">#{inOrOut},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTransactionRecord" parameterType="TransactionRecord">
+        update transaction_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cId != null">c_id = #{cId},</if>
+            <if test="mId != null">m_id = #{mId},</if>
+            <if test="tId != null">t_id = #{tId},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="tDate != null">t_date = #{tDate},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="color != null">color = #{color},</if>
+            <if test="inOrOut != null">in_or_out = #{inOrOut},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where tr_id = #{trId}
+    </update>
+
+    <delete id="deleteTransactionRecordByTrId" parameterType="Long">
+        delete from transaction_record where tr_id = #{trId}
+    </delete>
+
+    <delete id="deleteTransactionRecordByTrIds" parameterType="String">
+        delete from transaction_record where tr_id in 
+        <foreach item="trId" collection="array" open="(" separator="," close=")">
+            #{trId}
+        </foreach>
+    </delete>
+
+</mapper>

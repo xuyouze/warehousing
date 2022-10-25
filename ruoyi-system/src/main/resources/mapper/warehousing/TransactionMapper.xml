@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.warehousing.mapper.TransactionMapper">
+    
+    <resultMap type="Transaction" id="TransactionResult">
+        <result property="tId"    column="t_id"    />
+        <result property="mId"    column="m_id"    />
+        <result property="tDate"    column="t_date"    />
+        <result property="inOrOut"    column="in_or_out"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTransactionVo">
+        select t_id, m_id, t_date, in_or_out, create_by, create_time, update_by, update_time, remark from transaction
+    </sql>
+
+    <select id="selectTransactionList" parameterType="Transaction" resultMap="TransactionResult">
+        <include refid="selectTransactionVo"/>
+        <where>  
+            <if test="mId != null "> and m_id = #{mId}</if>
+            <if test="tDate != null "> and t_date = #{tDate}</if>
+            <if test="inOrOut != null "> and in_or_out = #{inOrOut}</if>
+        </where>
+    </select>
+    
+    <select id="selectTransactionByTId" parameterType="Long" resultMap="TransactionResult">
+        <include refid="selectTransactionVo"/>
+        where t_id = #{tId}
+    </select>
+        
+    <insert id="insertTransaction" parameterType="Transaction" useGeneratedKeys="true" keyProperty="tId">
+        insert into transaction
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mId != null">m_id,</if>
+            <if test="tDate != null">t_date,</if>
+            <if test="inOrOut != null">in_or_out,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mId != null">#{mId},</if>
+            <if test="tDate != null">#{tDate},</if>
+            <if test="inOrOut != null">#{inOrOut},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTransaction" parameterType="Transaction">
+        update transaction
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mId != null">m_id = #{mId},</if>
+            <if test="tDate != null">t_date = #{tDate},</if>
+            <if test="inOrOut != null">in_or_out = #{inOrOut},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where t_id = #{tId}
+    </update>
+
+    <delete id="deleteTransactionByTId" parameterType="Long">
+        delete from transaction where t_id = #{tId}
+    </delete>
+
+    <delete id="deleteTransactionByTIds" parameterType="String">
+        delete from transaction where t_id in 
+        <foreach item="tId" collection="array" open="(" separator="," close=")">
+            #{tId}
+        </foreach>
+    </delete>
+
+</mapper>
