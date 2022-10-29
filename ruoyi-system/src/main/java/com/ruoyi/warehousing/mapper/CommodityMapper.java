@@ -1,6 +1,7 @@
 package com.ruoyi.warehousing.mapper;
 
 import com.ruoyi.warehousing.domain.Commodity;
+import com.ruoyi.warehousing.domain.Manufacturer;
 
 import java.util.List;
 
@@ -59,4 +60,7 @@ public interface CommodityMapper
      * @return 结果
      */
     public int deleteCommodityByCIds(String[] cIds);
+
+    public List<Commodity> selectCommodityAll();
+
 }

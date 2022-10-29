@@ -58,4 +58,6 @@ public interface TransactionRecordMapper
      * @return 结果
      */
     public int deleteTransactionRecordByTrIds(String[] trIds);
+
+
 }

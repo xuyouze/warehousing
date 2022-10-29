@@ -94,4 +94,9 @@ public class ManufacturerServiceImpl implements IManufacturerService
     {
         return manufacturerMapper.deleteManufacturerByMId(mId);
     }
+
+    @Override
+    public List<Manufacturer> selectManufacturerAll() {
+        return manufacturerMapper.selectManufacturerAll();
+    }
 }

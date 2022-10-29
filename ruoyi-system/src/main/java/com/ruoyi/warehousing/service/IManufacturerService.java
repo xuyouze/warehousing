@@ -1,6 +1,8 @@
 package com.ruoyi.warehousing.service;
 
 import java.util.List;
+
+import com.ruoyi.common.core.domain.entity.SysDictType;
 import com.ruoyi.warehousing.domain.Manufacturer;
 
 /**
@@ -58,4 +60,7 @@ public interface IManufacturerService
      * @return 结果
      */
     public int deleteManufacturerByMId(Long mId);
+
+    public List<Manufacturer> selectManufacturerAll();
+
 }

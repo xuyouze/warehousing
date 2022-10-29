@@ -1,6 +1,7 @@
 package com.ruoyi.warehousing.service;
 
 import com.ruoyi.warehousing.domain.Commodity;
+import com.ruoyi.warehousing.domain.Manufacturer;
 
 import java.util.List;
 
@@ -59,4 +60,7 @@ public interface ICommodityService
      * @return 结果
      */
     public int deleteCommodityByCId(Long cId);
+
+    public List<Commodity> selectCommodityAll();
+
 }

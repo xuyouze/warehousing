@@ -29,7 +29,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectCommodityVo"/>
         where c_id = #{cId}
     </select>
-        
+
+    <select id="selectCommodityAll" resultMap="CommodityResult">
+        <include refid="selectCommodityVo"/>
+    </select>
     <insert id="insertCommodity" parameterType="Commodity" useGeneratedKeys="true" keyProperty="cId">
         insert into commodity
         <trim prefix="(" suffix=")" suffixOverrides=",">

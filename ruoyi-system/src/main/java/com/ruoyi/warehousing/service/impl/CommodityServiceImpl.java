@@ -94,4 +94,9 @@ public class CommodityServiceImpl implements ICommodityService
     {
         return commodityMapper.deleteCommodityByCId(cId);
     }
+
+    @Override
+    public List<Commodity> selectCommodityAll() {
+        return commodityMapper.selectCommodityAll();
+    }
 }

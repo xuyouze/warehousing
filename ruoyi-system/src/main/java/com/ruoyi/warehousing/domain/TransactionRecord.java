@@ -24,9 +24,15 @@ public class TransactionRecord extends BaseEntity
     @Excel(name = "商品ID")
     private Long cId;
 
+    @Excel(name = "商品名")
+    private String commodityName;
+
     /** 厂家ID */
     @Excel(name = "厂家ID")
     private Long mId;
+
+    @Excel(name = "厂家名")
+    private String manufacturerName;
 
     /** 交易单ID */
     @Excel(name = "交易单ID")
@@ -50,8 +56,8 @@ public class TransactionRecord extends BaseEntity
     private String color;
 
     /** 是否入库 */
-    @Excel(name = "是否入库")
-    private Integer inOrOut;
+    @Excel(name = "操作状态", readConverterExp = "0=出库,1=入库")
+    private String inOrOut;
 
     public void setTrId(Long trId) 
     {
@@ -125,14 +131,29 @@ public class TransactionRecord extends BaseEntity
     {
         return color;
     }
-    public void setInOrOut(Integer inOrOut) 
-    {
-        this.inOrOut = inOrOut;
+
+    public String getCommodityName() {
+        return commodityName;
     }
 
-    public Integer getInOrOut() 
-    {
+    public void setCommodityName(String commodityName) {
+        this.commodityName = commodityName;
+    }
+
+    public String getManufacturerName() {
+        return manufacturerName;
+    }
+
+    public void setManufacturerName(String manufacturerName) {
+        this.manufacturerName = manufacturerName;
+    }
+
+    public String getInOrOut() {
         return inOrOut;
+    }
+
+    public void setInOrOut(String inOrOut) {
+        this.inOrOut = inOrOut;
     }
 
     @Override

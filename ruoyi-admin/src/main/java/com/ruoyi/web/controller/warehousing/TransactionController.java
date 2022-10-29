@@ -1,15 +1,15 @@
 package com.ruoyi.web.controller.warehousing;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.warehousing.service.ICommodityService;
+import com.ruoyi.warehousing.service.IManufacturerService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.warehousing.domain.Transaction;
@@ -21,23 +21,28 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * transactionController
- * 
+ *
  * @author youze.xu
  * @date 2022-10-24
  */
 @Controller
 @RequestMapping("/warehousing/transaction")
-public class TransactionController extends BaseController
-{
+public class TransactionController extends BaseController {
     private String prefix = "warehousing/transaction";
 
     @Autowired
     private ITransactionService transactionService;
 
+    @Autowired
+    private IManufacturerService manufacturerService;
+
+    @Autowired
+    private ICommodityService commodityService;
+
     @RequiresPermissions("warehousing:transaction:view")
     @GetMapping()
-    public String transaction()
-    {
+    public String transaction(ModelMap mmap) {
+        mmap.put("manufacturerList", manufacturerService.selectManufacturerAll());
         return prefix + "/transaction";
     }
 
@@ -47,10 +52,10 @@ public class TransactionController extends BaseController
     @RequiresPermissions("warehousing:transaction:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Transaction transaction)
-    {
+    public TableDataInfo list(Transaction transaction) {
         startPage();
         List<Transaction> list = transactionService.selectTransactionList(transaction);
+
         return getDataTable(list);
     }
 
@@ -61,8 +66,7 @@ public class TransactionController extends BaseController
     @Log(title = "transaction", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(Transaction transaction)
-    {
+    public AjaxResult export(Transaction transaction) {
         List<Transaction> list = transactionService.selectTransactionList(transaction);
         ExcelUtil<Transaction> util = new ExcelUtil<Transaction>(Transaction.class);
         return util.exportExcel(list, "transaction数据");
@@ -72,8 +76,10 @@ public class TransactionController extends BaseController
      * 新增transaction
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add(ModelMap mmap) {
+        mmap.put("commodityList", commodityService.selectCommodityAll());
+        mmap.put("manufacturerList", manufacturerService.selectManufacturerAll());
+        mmap.put("today_date", DateUtils.getDate());
         return prefix + "/add";
     }
 
@@ -84,8 +90,8 @@ public class TransactionController extends BaseController
     @Log(title = "transaction", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(Transaction transaction)
-    {
+    public AjaxResult addSave(@RequestBody Transaction transaction) {
+        transaction.setCreateBy(getLoginName());
         return toAjax(transactionService.insertTransaction(transaction));
     }
 
@@ -94,10 +100,11 @@ public class TransactionController extends BaseController
      */
     @RequiresPermissions("warehousing:transaction:edit")
     @GetMapping("/edit/{tId}")
-    public String edit(@PathVariable("tId") Long tId, ModelMap mmap)
-    {
+    public String edit(@PathVariable("tId") Long tId, ModelMap mmap) {
         Transaction transaction = transactionService.selectTransactionByTId(tId);
         mmap.put("transaction", transaction);
+        mmap.put("manufacturerList", manufacturerService.selectManufacturerAll());
+//        mmap.put("manufacturer", manufacturerService.selectManufacturerByMId(transaction.getmId()));
         return prefix + "/edit";
     }
 
@@ -108,8 +115,7 @@ public class TransactionController extends BaseController
     @Log(title = "transaction", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(Transaction transaction)
-    {
+    public AjaxResult editSave(Transaction transaction) {
         return toAjax(transactionService.updateTransaction(transaction));
     }
 
@@ -118,10 +124,9 @@ public class TransactionController extends BaseController
      */
     @RequiresPermissions("warehousing:transaction:remove")
     @Log(title = "transaction", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(transactionService.deleteTransactionByTIds(ids));
     }
 }

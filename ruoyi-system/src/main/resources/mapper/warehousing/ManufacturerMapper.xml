@@ -29,7 +29,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectManufacturerVo"/>
         where m_id = #{mId}
     </select>
-        
+
+    <select id="selectManufacturerAll" resultMap="ManufacturerResult">
+        <include refid="selectManufacturerVo"/>
+    </select>
+
     <insert id="insertManufacturer" parameterType="Manufacturer" useGeneratedKeys="true" keyProperty="mId">
         insert into manufacturer
         <trim prefix="(" suffix=")" suffixOverrides=",">

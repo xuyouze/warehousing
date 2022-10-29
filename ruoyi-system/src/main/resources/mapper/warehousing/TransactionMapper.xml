@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Transaction" id="TransactionResult">
         <result property="tId"    column="t_id"    />
         <result property="mId"    column="m_id"    />
+        <result property="manufacturerName"    column="manufacturer_name"    />
         <result property="tDate"    column="t_date"    />
         <result property="inOrOut"    column="in_or_out"    />
         <result property="createBy"    column="create_by"    />
@@ -17,16 +18,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectTransactionVo">
-        select t_id, m_id, t_date, in_or_out, create_by, create_time, update_by, update_time, remark from transaction
+        select t.t_id, t.m_id,m.manufacturer_name, t.t_date, t.in_or_out, t.create_by, t.create_time, t.update_by, t.update_time, t.remark from transaction t
+        left join manufacturer m on t.m_id = m.m_id
     </sql>
 
     <select id="selectTransactionList" parameterType="Transaction" resultMap="TransactionResult">
         <include refid="selectTransactionVo"/>
         <where>  
-            <if test="mId != null "> and m_id = #{mId}</if>
+            <if test="mId != null "> and t.m_id = #{mId}</if>
+            <if test="manufacturerName != null "> and manufacturer_name = #{manufacturerName}</if>
             <if test="tDate != null "> and t_date = #{tDate}</if>
-            <if test="inOrOut != null "> and in_or_out = #{inOrOut}</if>
+            <if test="inOrOut != null  and inOrOut != ''"> and in_or_out = #{inOrOut}</if>
         </where>
+        order by t.t_id desc
     </select>
     
     <select id="selectTransactionByTId" parameterType="Long" resultMap="TransactionResult">
