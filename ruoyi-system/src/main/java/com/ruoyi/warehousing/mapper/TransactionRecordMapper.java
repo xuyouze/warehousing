@@ -59,5 +59,11 @@ public interface TransactionRecordMapper
      */
     public int deleteTransactionRecordByTrIds(String[] trIds);
 
+    public int deleteTransactionRecordBytId(Long tId);
+
+    public int deleteTransactionRecordBytIds(String[] tIds);
+
+//    public long selectCountTransactionRecordBytIds(String[] tIds);
+
 
 }

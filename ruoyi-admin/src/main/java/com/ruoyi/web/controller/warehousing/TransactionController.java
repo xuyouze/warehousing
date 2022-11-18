@@ -104,6 +104,7 @@ public class TransactionController extends BaseController {
         Transaction transaction = transactionService.selectTransactionByTId(tId);
         mmap.put("transaction", transaction);
         mmap.put("manufacturerList", manufacturerService.selectManufacturerAll());
+        mmap.put("commodityList", commodityService.selectCommodityAll());
 //        mmap.put("manufacturer", manufacturerService.selectManufacturerByMId(transaction.getmId()));
         return prefix + "/edit";
     }
@@ -115,7 +116,8 @@ public class TransactionController extends BaseController {
     @Log(title = "transaction", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(Transaction transaction) {
+    public AjaxResult editSave(@RequestBody Transaction transaction) {
+        transaction.setUpdateBy(getLoginName());
         return toAjax(transactionService.updateTransaction(transaction));
     }
 

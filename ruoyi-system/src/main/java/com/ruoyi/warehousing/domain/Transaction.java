@@ -34,7 +34,6 @@ public class Transaction extends BaseEntity {
 
     private List<TransactionRecord> transactionRecordList;
 
-    private String tmp;
 
     /**
      * 交易日期
@@ -95,15 +94,6 @@ public class Transaction extends BaseEntity {
 
     public void setTransactionRecordList(List<TransactionRecord> transactionRecordList) {
         this.transactionRecordList = transactionRecordList;
-    }
-
-
-    public String getTmp() {
-        return tmp;
-    }
-
-    public void setTmp(String tmp) {
-        this.tmp = tmp;
     }
 
     @Override

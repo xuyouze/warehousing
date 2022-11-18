@@ -60,6 +60,9 @@ public class TransactionServiceImpl implements ITransactionService {
         transaction.setCreateTime(DateUtils.getNowDate());
         int result = transactionMapper.insertTransaction(transaction);
         List<TransactionRecord> transactionRecordList = transaction.getTransactionRecordList();
+        if (transactionRecordList == null || transactionRecordList.size() == 0) {
+            return 0;
+        }
         for (TransactionRecord i :
                 transactionRecordList) {
             BeanUtils.copyProperties(transaction, i);
@@ -77,7 +80,17 @@ public class TransactionServiceImpl implements ITransactionService {
     @Override
     public int updateTransaction(Transaction transaction) {
         transaction.setUpdateTime(DateUtils.getNowDate());
-        return transactionMapper.updateTransaction(transaction);
+        int result = transactionMapper.updateTransaction(transaction);
+        List<TransactionRecord> transactionRecordList = transaction.getTransactionRecordList();
+        if (transactionRecordList == null || transactionRecordList.size() == 0) {
+            return 0;
+        }
+        for (TransactionRecord i :
+                transactionRecordList) {
+            BeanUtils.copyProperties(transaction, i);
+            transactionRecordMapper.updateTransactionRecord(i);
+        }
+        return result;
     }
 
     /**
@@ -88,6 +101,7 @@ public class TransactionServiceImpl implements ITransactionService {
      */
     @Override
     public int deleteTransactionByTIds(String tIds) {
+        transactionRecordMapper.deleteTransactionRecordBytIds(Convert.toStrArray(tIds));
         return transactionMapper.deleteTransactionByTIds(Convert.toStrArray(tIds));
     }
 
@@ -99,6 +113,7 @@ public class TransactionServiceImpl implements ITransactionService {
      */
     @Override
     public int deleteTransactionByTId(Long tId) {
+        transactionRecordMapper.deleteTransactionRecordBytId(tId);
         return transactionMapper.deleteTransactionByTId(tId);
     }
 }

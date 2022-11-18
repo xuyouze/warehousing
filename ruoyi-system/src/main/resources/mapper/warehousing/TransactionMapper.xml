@@ -1,43 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.warehousing.mapper.TransactionMapper">
-    
+
     <resultMap type="Transaction" id="TransactionResult">
-        <result property="tId"    column="t_id"    />
-        <result property="mId"    column="m_id"    />
-        <result property="manufacturerName"    column="manufacturer_name"    />
-        <result property="tDate"    column="t_date"    />
-        <result property="inOrOut"    column="in_or_out"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
+        <result property="tId" column="t_id"/>
+        <result property="mId" column="m_id"/>
+        <result property="manufacturerName" column="manufacturer_name"/>
+        <result property="tDate" column="t_date"/>
+        <result property="inOrOut" column="in_or_out"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <collection property="transactionRecordList" javaType="java.util.List" resultMap="transactionRecordResult"/>
+    </resultMap>
+
+
+    <resultMap id="transactionRecordResult" type="TransactionRecord">
+        <result property="trId" column="tr_id"/>
+        <result property="cId" column="c_id"/>
+        <result property="amount" column="amount"/>
+        <result property="unit" column="unit"/>
+        <result property="color" column="color"/>
     </resultMap>
 
     <sql id="selectTransactionVo">
-        select t.t_id, t.m_id,m.manufacturer_name, t.t_date, t.in_or_out, t.create_by, t.create_time, t.update_by, t.update_time, t.remark from transaction t
-        left join manufacturer m on t.m_id = m.m_id
+        select t.t_id,
+               t.m_id,
+               m.manufacturer_name,
+               t.t_date,
+               t.in_or_out,
+               t.create_by,
+               t.create_time,
+               t.update_by,
+               t.update_time,
+               t.remark,
+               tr.tr_id,
+               tr.c_id,
+               tr.amount,
+               tr.unit,
+               tr.color
+        from transaction t
+                 left join manufacturer m on t.m_id = m.m_id
+                 left join transaction_record tr on tr.t_id = t.t_id
     </sql>
 
     <select id="selectTransactionList" parameterType="Transaction" resultMap="TransactionResult">
         <include refid="selectTransactionVo"/>
-        <where>  
-            <if test="mId != null "> and t.m_id = #{mId}</if>
-            <if test="manufacturerName != null "> and manufacturer_name = #{manufacturerName}</if>
-            <if test="tDate != null "> and t_date = #{tDate}</if>
-            <if test="inOrOut != null  and inOrOut != ''"> and in_or_out = #{inOrOut}</if>
+        <where>
+            <if test="mId != null ">and t.m_id = #{mId}</if>
+            <if test="manufacturerName != null ">and m.manufacturer_name = #{manufacturerName}</if>
+            <if test="tDate != null ">and t.t_date = #{tDate}</if>
+            <if test="inOrOut != null  and inOrOut != ''">and t.in_or_out = #{inOrOut}</if>
         </where>
         order by t.t_id desc
     </select>
-    
+
     <select id="selectTransactionByTId" parameterType="Long" resultMap="TransactionResult">
         <include refid="selectTransactionVo"/>
-        where t_id = #{tId}
+        where t.t_id = #{tId}
     </select>
-        
+
     <insert id="insertTransaction" parameterType="Transaction" useGeneratedKeys="true" keyProperty="tId">
         insert into transaction
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -49,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="mId != null">#{mId},</if>
             <if test="tDate != null">#{tDate},</if>
@@ -59,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateTransaction" parameterType="Transaction">
@@ -78,11 +104,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteTransactionByTId" parameterType="Long">
-        delete from transaction where t_id = #{tId}
+        delete
+        from transaction
+        where t_id = #{tId}
     </delete>
 
     <delete id="deleteTransactionByTIds" parameterType="String">
-        delete from transaction where t_id in 
+        delete from transaction where t_id in
         <foreach item="tId" collection="array" open="(" separator="," close=")">
             #{tId}
         </foreach>

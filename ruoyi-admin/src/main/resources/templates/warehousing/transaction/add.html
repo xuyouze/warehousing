@@ -39,13 +39,10 @@
         </div>
 
         <div class="col-sm-8 select-table ">
-
             <table id="bootstrap-table" class="mytable">
                 <thead>
                 <tr>
-                    <th>
-                        商品名称
-                    </th>
+                    <th> 商品名称</th>
                     <th> 数量</th>
                     <th> 单位</th>
                     <th> 颜色</th>
@@ -235,7 +232,6 @@
             for (let i = 1; i < trList.length; i++) {
                 let obj = {};
                 let cId = $(trList[i]).find("select[name='cId']").val()
-                console.log(cId);
                 if (typeof (cId) != 'undefined' && cId !== '') { //只处理选中的行数据
                     obj["cId"] = cId
                     obj["unit"] = $(trList[i]).find("select[name='unit']").val()
@@ -243,6 +239,10 @@
                     obj["amount"] = $(trList[i]).find("input[name='amount']").val()
                     lists.push(obj)
                 }
+            }
+            if (lists.length === 0){
+                $.modal.alertWarning('请保存至少一条数据');
+                return
             }
             let result_data = {};
             $("#form-transaction-add").serializeArray().map(function (x) {
@@ -256,7 +256,6 @@
                 }
             });
             result_data["transactionRecordList"] = lists
-            console.log(result_data)
             $.operate.save_json(prefix + "/add", JSON.stringify(result_data));
         }
 

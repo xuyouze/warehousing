@@ -1,71 +1,157 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改transaction')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('修改transaction')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-transaction-edit" th:object="${transaction}">
-            <input name="tId" th:field="*{tId}" type="hidden">
-            <div class="form-group">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-transaction-edit" th:object="${transaction}">
+        <input name="tId" th:field="*{tId}" type="hidden">
+        <div class="form-group">
 
-                <label class="col-sm-3 control-label is-required">厂家名称：</label>
-                <div class="col-sm-8">
-<!--                    <input name="mId" th:field="*{mId}" class="form-control" type="text" required>-->
-                    <select id="mId" name="mId" class="form-control">
-                        <option th:each="manufacturer: ${manufacturerList}"
-                                th:text="${manufacturer['manufacturerName']}"
-                                th:value="${manufacturer['mId']}" th:field="*{mId}"></option>
-                    </select>
-                </div>
+            <label class="col-sm-3 control-label is-required">厂家名称：</label>
+            <div class="col-sm-8">
+                <!--                    <input name="mId" th:field="*{mId}" class="form-control" type="text" required>-->
+                <select id="mId" name="mId" class="form-control">
+                    <option th:each="manufacturer: ${manufacturerList}"
+                            th:text="${manufacturer['manufacturerName']}"
+                            th:value="${manufacturer['mId']}" th:field="*{mId}"></option>
+                </select>
             </div>
+        </div>
 
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">交易日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <input name="tDate" th:value="${#dates.format(transaction.tDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">交易日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <input name="tDate" th:value="${#dates.format(transaction.tDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">操作状态：</label>
-                <div class="col-sm-8">
-                    <select name="inOrOut" th:with="type=${@dict.getType('warehousing_status')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                th:value="${dict.dictValue}" th:field="*{inOrOut}"></option>
-                    </select>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">操作状态：</label>
+            <div class="col-sm-8">
+                <select name="inOrOut" th:with="type=${@dict.getType('warehousing_status')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{inOrOut}"></option>
+                </select>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">备注信息：</label>
-                <div class="col-sm-8">
-                    <textarea name="remark" class="form-control">[[*{remark}]]</textarea>
-                </div>
-            </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <script th:inline="javascript">
-        var prefix = ctx + "warehousing/transaction";
-        $("#form-transaction-edit").validate({
-            focusCleanup: true
-        });
+        </div>
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-transaction-edit').serialize());
+        <div class="col-sm-8 select-table ">
+            <table id="bootstrap-table" class="mytable">
+                <thead>
+                <tr>
+                    <th> 商品名称</th>
+                    <th> 数量</th>
+                    <th> 单位</th>
+                    <th> 颜色</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="transactionRecord : ${transaction.transactionRecordList}">
+                    <td>
+                        <div class="col-sm-15">
+                            <select name="cId" class="form-control col-sm-5">
+                                <option value=""></option>
+                                <option th:each="commodity: ${commodityList}"
+                                        th:text="${commodity['commodityName']}"
+                                        th:value="${commodity['cId']}"
+                                        th:selected="${transactionRecord.cId==commodity.cId}"></option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-sm-12">
+                            <input name="amount" class="form-control" type="text"
+                                   th:value="${transactionRecord.amount}">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-sm-12">
+                            <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictLabel}"
+                                        th:selected="${transactionRecord.unit == dict.dictLabel }"></option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-sm-12">
+                            <input name="color" class="form-control" type="text" th:value="${transactionRecord.color}">
+                        </div>
+                    </td>
+                    <td style="display: none">
+                        <input name="trId" class="form-control" type="text" th:value="${transactionRecord.trId}">
+                    </td>
+
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注信息：</label>
+            <div class="col-sm-8">
+                <textarea name="remark" class="form-control">[[*{remark}]]</textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "warehousing/transaction";
+    $("#form-transaction-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            let lists = [];
+            // 获取每行的结果
+            let trList = $("#bootstrap-table").find("tr");
+            for (let i = 1; i < trList.length; i++) {
+                let obj = {};
+                let cId = $(trList[i]).find("select[name='cId']").val()
+                if (typeof (cId) != 'undefined' && cId !== '') { //只处理选中的行数据
+                    obj["cId"] = cId
+                    obj["trId"] = $(trList[i]).find("input[name='trId']").val()
+                    obj["unit"] = $(trList[i]).find("select[name='unit']").val()
+                    obj["color"] = $(trList[i]).find("input[name='color']").val()
+                    obj["amount"] = $(trList[i]).find("input[name='amount']").val()
+                    lists.push(obj)
+                }
             }
+            if (lists.length === 0) {
+                $.modal.alertWarning('请保存至少一条数据');
+                return 0;
+            }
+            let result_data = {};
+            $("#form-transaction-edit").serializeArray().map(function (x) {
+                if (result_data[x.name] !== undefined) {
+                    if (!result_data[x.name].push) {
+                        result_data[x.name] = [result_data[x.name]];
+                    }
+                    result_data[x.name].push(x.value || '');
+                } else {
+                    result_data[x.name] = x.value || '';
+                }
+            });
+            result_data["transactionRecordList"] = lists
+            $.operate.save_json(prefix + "/edit", JSON.stringify(result_data));
         }
+    }
 
-        $("input[name='tDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-    </script>
+    $("input[name='tDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
 </body>
 </html>
