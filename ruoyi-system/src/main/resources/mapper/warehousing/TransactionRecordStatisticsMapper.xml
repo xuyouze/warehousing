@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.warehousing.mapper.TransactionRecordStatisticsMapper">
+
+
+    <resultMap type="TransactionRecordStatistics" id="TransactionRecordStatisticsResult">
+        <result property="cId" column="c_id"/>
+        <result property="mId" column="m_id"/>
+        <result property="color" column="color"/>
+        <result property="inOrOut" column="in_or_out"/>
+        <result property="amount" column="amount"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
+    <select id="selectTransactionRecordStatisticsGroupList" parameterType="java.util.Map"
+            resultMap="TransactionRecordStatisticsResult">
+        select ${groupfield} from transaction_record tr
+        <where>
+            <if test="params != null">
+                <if test="cId != null and cId != ''">and c_id =
+                    #{cId}
+                </if>
+                <if test="mId != null and mId != ''">and m_id =
+                    #{mId}
+                </if>
+                <if test="inOrOut != null and inOrOut != ''">and in_or_out = #{inOrOut}</if>
+                <if test="beginTime != null and beginTime != ''">
+                    AND date_format(t_date,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+                </if>
+                <if test="endTime != null and endTime != '' ">
+                    AND date_format(t_date,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+                </if>
+            </if>
+        </where>
+        group by ${groupby}
+    </select>
+
+</mapper>
+        <!--<?xml version="1.0" encoding="UTF-8" ?>-->
+        <!--<!DOCTYPE mapper-->
+        <!--        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"-->
+        <!--        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+        <!--<mapper namespace="com.ruoyi.warehousing.mapper.TransactionRecordSumMapper">-->
+
+        <!--    <resultMap type="TransactionRecord" id="TransactionRecordResult">-->
+        <!--        <result property="cId" column="c_id"/>-->
+        <!--        <result property="commodityName" column="commodity_name"/>-->
+        <!--        <result property="mId" column="m_id"/>-->
+        <!--        <result property="manufacturerName" column="manufacturer_name"/>-->
+        <!--        <result property="amount" column="amount"/>-->
+        <!--        <result property="tDate" column="t_date"/>-->
+        <!--        <result property="color" column="color"/>-->
+        <!--        <result property="inOrOut" column="in_or_out"/>-->
+
+        <!--        <result property="colorFlag" column="color_flag"/>-->
+        <!--        <result property="inOrOutFlag" column="in_or_out_flag"/>-->
+        <!--        <result property="cIdFlag" column="c_id_flag"/>-->
+        <!--        <result property="mIdFlag" column="m_id_flag"/>-->
+
+        <!--        <result property="count" column="count"/>-->
+        <!--    </resultMap>-->
+
+        <!--    <sql id="selectTransactionRecordVo">-->
+        <!--        SELECT tr.tr_id,-->
+        <!--               tr.c_id,-->
+        <!--               c.commodity_name,-->
+        <!--               m.m_id,-->
+        <!--               m.manufacturer_name,-->
+        <!--               tr.t_id,-->
+        <!--               tr.amount,-->
+        <!--               tr.t_date,-->
+        <!--               tr.unit,-->
+        <!--               tr.color,-->
+        <!--               tr.in_or_out,-->
+        <!--               tr.create_by,-->
+        <!--               tr.create_time,-->
+        <!--               tr.update_by,-->
+        <!--               tr.update_time,-->
+        <!--               tr.remark-->
+        <!--        FROM transaction_record AS tr-->
+        <!--                 LEFT JOIN manufacturer AS m ON tr.m_id = m.m_id-->
+        <!--                 LEFT JOIN commodity AS c ON c.c_id = tr.c_id-->
+        <!--    </sql>-->
+
+        <!--    <select id="selectTransactionRecordList" parameterType="TransactionRecord" resultMap="TransactionRecordResult">-->
+        <!--        SELECT-->
+        <!--        <trim suffixOverrides=",">-->
+        <!--            sum(amount) AS amount,-->
+        <!--            count(*) count,-->
+        <!--            <if test="inOrOutFlag != null ">in_or_out,</if>-->
+        <!--            <if test="colorFlag != null ">color,</if>-->
+        <!--            <if test="cIdFlag != null ">c_id,</if>-->
+        <!--            <if test="cIdFlag != null ">commodity_name,</if>-->
+        <!--            <if test="mIdFlag != null ">m_id,</if>-->
+        <!--            <if test="mIdFlag != null ">manufacturer_name,</if>-->
+        <!--        </trim>-->
+        <!--        FROM-->
+        <!--        (-->
+        <!--        <include refid="selectTransactionRecordVo"/>-->
+        <!--        ) t-->
+        <!--        <where>-->
+        <!--            <if test="cId != null ">and t.c_id = #{cId}</if>-->
+        <!--            <if test="mId != null ">and t.m_id = #{mId}</if>-->
+        <!--            <if test="color != null  and color != ''">and t.color like concat('%', #{color}, '%')</if>-->
+        <!--            <if test="params.beginTime != null and params.beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
+        <!--                AND date_format(t.t_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')-->
+        <!--            </if>-->
+        <!--            <if test="params.endTime != null and params.endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
+        <!--                AND date_format(t.t_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
+        <!--            </if>-->
+        <!--        </where>-->
+        <!--        <trim prefix="GROUP BY" suffixOverrides=",">-->
+        <!--            <if test="inOrOutFlag != null ">in_or_out,</if>-->
+        <!--            <if test="colorFlag != null ">color,</if>-->
+        <!--            <if test="cIdFlag != null ">c_id,</if>-->
+        <!--            <if test="mIdFlag != null ">m_id,</if>-->
+        <!--        </trim>-->
+        <!--    </select>-->
+
+        <!--</mapper>-->

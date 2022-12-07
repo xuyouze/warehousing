@@ -7,7 +7,9 @@
     <resultMap type="TransactionRecord" id="TransactionRecordResult">
         <result property="trId" column="tr_id"/>
         <result property="cId" column="c_id"/>
+        <result property="commodityName" column="commodity_name"/>
         <result property="mId" column="m_id"/>
+        <result property="manufacturerName" column="manufacturer_name"/>
         <result property="tId" column="t_id"/>
         <result property="amount" column="amount"/>
         <result property="tDate" column="t_date"/>
@@ -22,40 +24,50 @@
     </resultMap>
 
     <sql id="selectTransactionRecordVo">
-        select tr_id,
-               c_id,
-               m_id,
-               t_id,
-               amount,
-               t_date,
-               unit,
-               color,
-               in_or_out,
-               create_by,
-               create_time,
-               update_by,
-               update_time,
-               remark
-        from transaction_record
+        select tr.tr_id,
+               tr.c_id,
+               c.commodity_name,
+               m.m_id,
+               m.manufacturer_name,
+               tr.t_id,
+               tr.amount,
+               tr.t_date,
+               tr.unit,
+               tr.color,
+               tr.in_or_out,
+               tr.create_by,
+               tr.create_time,
+               tr.update_by,
+               tr.update_time,
+               tr.remark
+        from transaction_record tr
+                 left join manufacturer m on tr.m_id = m.m_id
+                 left join commodity c on c.c_id = tr.c_id
     </sql>
 
     <select id="selectTransactionRecordList" parameterType="TransactionRecord" resultMap="TransactionRecordResult">
         <include refid="selectTransactionRecordVo"/>
         <where>
-            <if test="cId != null ">and c_id = #{cId}</if>
-            <if test="mId != null ">and m_id = #{mId}</if>
-            <if test="tId != null ">and t_id = #{tId}</if>
-            <if test="amount != null ">and amount = #{amount}</if>
-            <if test="tDate != null ">and t_date = #{tDate}</if>
-            <if test="unit != null  and unit != ''">and unit = #{unit}</if>
-            <if test="color != null  and color != ''">and color = #{color}</if>
-            <if test="inOrOut != null ">and in_or_out = #{inOrOut}</if>
+            <if test="cId != null ">and tr.c_id = #{cId}</if>
+            <if test="mId != null ">and tr.m_id = #{mId}</if>
+            <if test="tId != null ">and tr.t_id = #{tId}</if>
+            <if test="amount != null ">and tr.amount = #{amount}</if>
+            <if test="unit != null  and unit != ''">and tr.unit = #{unit}</if>
+            <if test="color != null  and color != ''">and tr.color like concat('%', #{color}, '%')</if>
+            <if test="inOrOut != null and inOrOut != ''">and tr.in_or_out = #{inOrOut}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(tr.t_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(tr.t_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
         </where>
+        order by  tr_id desc
     </select>
 
     <select id="selectTransactionRecordByTrId" parameterType="Long" resultMap="TransactionRecordResult">
         <include refid="selectTransactionRecordVo"/>
-        where tr_id = #{trId}
+        where tr.tr_id = #{trId}
     </select>
 
 <!--    <select id="selectCountTransactionRecordBytIds" parameterType="String" resultMap="Long">-->

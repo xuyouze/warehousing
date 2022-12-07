@@ -53,7 +53,12 @@
         <where>
             <if test="mId != null ">and t.m_id = #{mId}</if>
             <if test="manufacturerName != null ">and m.manufacturer_name = #{manufacturerName}</if>
-            <if test="tDate != null ">and t.t_date = #{tDate}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(t.t_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(t.t_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
             <if test="inOrOut != null  and inOrOut != ''">and t.in_or_out = #{inOrOut}</if>
         </where>
         order by t.t_id desc

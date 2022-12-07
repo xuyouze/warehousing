@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="commodityName != null  and commodityName != ''"> and commodity_name like concat('%', #{commodityName}, '%')</if>
         </where>
+        order by c_id desc
     </select>
     
     <select id="selectCommodityByCId" parameterType="Long" resultMap="CommodityResult">

@@ -1,6 +1,9 @@
 package com.ruoyi.web.controller.warehousing;
 
 import java.util.List;
+
+import com.ruoyi.warehousing.service.ICommodityService;
+import com.ruoyi.warehousing.service.IManufacturerService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,10 +37,18 @@ public class TransactionRecordController extends BaseController
     @Autowired
     private ITransactionRecordService transactionRecordService;
 
+    @Autowired
+    private IManufacturerService manufacturerService;
+
+    @Autowired
+    private ICommodityService commodityService;
+
     @RequiresPermissions("warehousing:transaction_record:view")
     @GetMapping()
-    public String transaction_record()
+    public String transaction_record(ModelMap mmap)
     {
+        mmap.put("manufacturerList", manufacturerService.selectManufacturerAll());
+        mmap.put("commodityList", commodityService.selectCommodityAll());
         return prefix + "/transaction_record";
     }
 
@@ -97,6 +108,7 @@ public class TransactionRecordController extends BaseController
     public String edit(@PathVariable("trId") Long trId, ModelMap mmap)
     {
         TransactionRecord transactionRecord = transactionRecordService.selectTransactionRecordByTrId(trId);
+        mmap.put("commodityList", commodityService.selectCommodityAll());
         mmap.put("transactionRecord", transactionRecord);
         return prefix + "/edit";
     }

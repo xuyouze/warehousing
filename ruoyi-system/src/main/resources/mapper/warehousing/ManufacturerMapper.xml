@@ -23,6 +23,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="manufacturerName != null  and manufacturerName != ''"> and manufacturer_name like concat('%', #{manufacturerName}, '%')</if>
         </where>
+        order by m_id desc
+
     </select>
     
     <select id="selectManufacturerByMId" parameterType="Long" resultMap="ManufacturerResult">

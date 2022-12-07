@@ -11,7 +11,7 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <!--                            <label>厂家名称：</label>-->
+                            <!--                              <label>厂家名称：</label>-->
                             <label>厂家名称：</label>
                             <select id="mId" name="mId" class="form-control">
                                 <option value="">所有</option>
@@ -20,12 +20,16 @@
                                         th:value="${manufacturer['mId']}"></option>
                             </select>
                         </li>
-                        <li>
-                            <label>交易日期：</label>
-                            <input type="text" class="time-input" placeholder="请选择交易日期" name="tDate"/>
+                        <li class="select-time">
+                            <label>出入库时间：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]"/>
                         </li>
                         <li>
-                            操作状态：<select name="inOrOut" th:with="type=${@dict.getType('warehousing_status')}">
+                            <label>操作状态：</label><select name="inOrOut" th:with="type=${@dict.getType('warehousing_status')}">
                             <option value="">所有</option>
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                     th:value="${dict.dictValue}"></option>
