@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('流转记录统计列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            商品名称：
+                            <select name="cId">
+                                <option value="">所有商品</option>
+                                <option th:each="commodity: ${commodityList}"
+                                        th:text="${commodity['commodityName']}"
+                                        th:value="${commodity['cId']}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            厂家名称：
+                            <select name="mId">
+                                <option value="">所有厂家</option>
+                                <option th:each="manufacturer: ${manufacturerList}"
+                                        th:text="${manufacturer['manufacturerName']}"
+                                        th:value="${manufacturer['mId']}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            颜色：
+                            <input type="text" name="color"/>
+                        </li>
+                        <li>
+                            操作状态：
+                            <select name="inOrOut" th:with="type=${@dict.getType('warehousing_status')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <label>出入库时间：</label>
+
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="beginTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="endTime"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="mysearch();"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="reset();"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <div class="row">
+                <div class="select-list">
+                    <ul style="padding-left: 17px;">
+                        <li>
+                            维度:
+                            <input type="checkbox" name="selectParam" value="in_or_out" checked="checked" disabled="disabled"
+                                   style="width: 50px;height: 20px;"/>出入库
+                            <input type="checkbox" name="selectParam" value="m_id"
+                                   style="width: 50px;height: 20px;"/>厂家名
+                            <input type="checkbox" name="selectParam" value="c_id"
+                                   style="width: 50px;height: 20px;"/>商品名
+                            <input type="checkbox" name="selectParam" value="color"
+                                   style="width: 50px;height: 20px;"/>颜色
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "warehousing/transaction_record_statistics";
+    var datas = [[${@dict.getType('warehousing_status')}]];
+
+    var columus = [
+        {
+            field: 'inOrOut',
+            title: '操作状态',
+            align: 'center',
+            formatter: function (value, row, index) {
+                return $.table.selectDictLabel(datas, value);
+            }
+        },
+
+        {
+            field: 'amount',
+            title: '数量'
+        },
+        {
+            field: 'unit',
+            title: '单位'
+        },
+
+        {
+            field: 'count',
+            title: '交易条数'
+        }
+    ];
+    $(function () {
+        // 初始化时间范围插件，传入三个id的名称
+        var options = {
+            url: prefix + "/getTransactionRecordStatisticsDataGroup",
+            modalName: "商品出入库记录统计",
+            showRefresh: false,
+            showSearch: false,
+            showColumns: false,
+            showToggle: false,
+            columns: columus,
+            queryParams: queryParams
+        };
+        $.table.init(options);
+    });
+
+    function mysearch() {
+        //维度 搜索
+        query();
+    }
+
+    function query() {
+        //点击维度加载按钮则需销毁原有表格重新加载表格
+        $("#bootstrap-table").bootstrapTable('destroy');
+        var options = {
+            id: "bootstrap-table",
+            url: prefix + "/getTransactionRecordStatisticsDataGroup",
+            modalName: "流转记录统计",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            queryParams: queryParams
+        };
+        //增加展示列
+        var columns2 = [];
+        var selectParam = "";
+        $("input[name='selectParam']:checked").each(function () {
+            selectParam = selectParam + $(this).val() + ",";
+        });
+        if (selectParam !== "") {
+            var c_id = selectParam.indexOf("c_id");
+            var m_id = selectParam.indexOf("m_id");
+            var color = selectParam.indexOf("color");
+            if (m_id >= 0) {
+                // 2
+                columns2.push({
+                    field: 'manufacturerName',
+                    title: '厂家名',
+                    // formatter: function (value, row, index) {
+                    //     return value.substring(0, 1) + "***" + value.substring(value.length - 1);
+                    // }
+                });
+            }
+            if (c_id >= 0) {
+                // 3
+                columns2.push({
+                    field: 'commodityName',
+                    title: '商品名',
+                });
+            }
+            if (color >= 0) {
+                // 4
+                columns2.push({
+                    field: 'color',
+                    title: '颜色',
+                    // formatter: function (value, row, index) {
+                    //     return value.substring(0, 1) + "***" + value.substring(value.length - 1);
+                    // }
+                });
+            }
+            columns2 = columns2.concat(columus);
+        } else {
+            columns2 = columus;
+        }
+        options.columns = columns2;
+        $.table.init(options);
+    }
+
+    function queryParams(params) {
+        //获取复选框选中的值
+        var selectParam = "";
+        $("input[name='selectParam']:checked").each(function () {
+            selectParam = selectParam + $(this).val() + ",";
+        });
+        var search = $.table.queryParams(params);
+        search.selectParam = selectParam.toString();
+        return search;
+    }
+
+    $("input:checkbox").change(function () {
+        var selectParam = "";
+        $("input[name='selectParam']:checked").each(function () {
+            selectParam = selectParam + $(this).val() + ",";
+        });
+        query();
+    });
+
+
+    //重置
+    function reset() {
+        $.form.reset();
+    }
+</script>
+</body>
+</html>
+

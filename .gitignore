@@ -19,8 +19,6 @@ target/
 
 *.docx
 *.woff
-*.css
-*.js
 
 ### STS ###
 .apt_generated
