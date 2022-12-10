@@ -17,7 +17,7 @@
         <select id="selectTransactionRecordStatisticsGroupList" parameterType="java.util.Map" resultMap="TransactionRecordStatisticsResult">
             SELECT
             <foreach item="selectParam" collection="selectParams" separator=",">
-                #{selectParam}
+                ${selectParam}
             </foreach>
             ,sum(amount) AS amount, count(*) AS count
             FROM
