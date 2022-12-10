@@ -48,33 +48,34 @@ public class TransactionRecordStatisticsServiceImpl implements ITransactionRecor
         String selectParam = (String) params.get("selectParam");
         System.out.println(selectParam);
         List<String> selectParamsList = Arrays.asList(selectParam.split(","));
-
-        if (StringUtils.isNotEmpty(selectParam)) {
-            String groupby = "";
-            String groupfield = "";
-            groupby += "in_or_out,";
-            groupfield += "in_or_out,";
-
-            if (selectParam.contains("2")) {
-                groupby = groupby + "color,";
-                groupfield = groupfield + "color,";
-            }
-            if (selectParam.contains("3")) {
-                groupby = groupby + "c_id,";
-                groupfield = groupfield + "c_id,";
-            }
-            if (selectParam.contains("4")) {
-                groupby = groupby + "m_id,";
-                groupfield = groupfield + "m_id,";
-            }
-            if (groupby.endsWith(",")) {
-                groupby = groupby.substring(0, groupby.length() - 1);
-            }
-            params.put("groupby", groupby);
-            //字段用
-            groupfield = groupfield + "sum(amount) as amount, count(*) as count";
-            params.put("groupfield", groupfield);
-        }
+//
+//        if (StringUtils.isNotEmpty(selectParam)) {
+//            String groupby = "";
+//            String groupfield = "";
+//            groupby += "in_or_out,";
+//            groupfield += "in_or_out,";
+//
+//            if (selectParam.contains("2")) {
+//                groupby = groupby + "color,";
+//                groupfield = groupfield + "color,";
+//            }
+//            if (selectParam.contains("3")) {
+//                groupby = groupby + "c_id,";
+//                groupfield = groupfield + "c_id,";
+//            }
+//            if (selectParam.contains("4")) {
+//                groupby = groupby + "m_id,";
+//                groupfield = groupfield + "m_id,";
+//            }
+//            if (groupby.endsWith(",")) {
+//                groupby = groupby.substring(0, groupby.length() - 1);
+//            }
+//            params.put("groupby", groupby);
+//            //字段用
+//            groupfield = groupfield + "sum(amount) as amount, count(*) as count";
+//            params.put("groupfield", groupfield);
+//        }
+        params.put("selectParams", selectParamsList);
         List<TransactionRecordStatistics> list = transactionRecordStatisticsMapper.selectTransactionRecordStatisticsGroupList(params);
         if (CollectionUtils.isNotEmpty(list)) {
             for (TransactionRecordStatistics transactionRecordStatistics : list) {

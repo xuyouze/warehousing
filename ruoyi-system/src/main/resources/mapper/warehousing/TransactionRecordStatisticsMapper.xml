@@ -14,28 +14,58 @@
         <result property="count" column="count"/>
     </resultMap>
 
-    <select id="selectTransactionRecordStatisticsGroupList" parameterType="java.util.Map"
-            resultMap="TransactionRecordStatisticsResult">
-        select ${groupfield} from transaction_record tr
-        <where>
-            <if test="params != null">
-                <if test="cId != null and cId != ''">and c_id =
-                    #{cId}
+        <select id="selectTransactionRecordStatisticsGroupList" parameterType="java.util.Map" resultMap="TransactionRecordStatisticsResult">
+            SELECT
+            <foreach item="selectParam" collection="selectParams" separator=",">
+                #{selectParam}
+            </foreach>
+            ,sum(amount) AS amount, count(*) AS count
+            FROM
+            transaction_record tr
+            <where>
+                <if test="params != null">
+                    <if test="cId != null and cId != ''">and c_id =
+                        #{cId}
+                    </if>
+                    <if test="mId != null and mId != ''">and m_id =
+                        #{mId}
+                    </if>
+                    <if test="inOrOut != null and inOrOut != ''">and in_or_out = #{inOrOut}</if>
+                    <if test="beginTime != null and beginTime != ''">
+                        AND date_format(t_date,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+                    </if>
+                    <if test="endTime != null and endTime != '' ">
+                        AND date_format(t_date,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+                    </if>
                 </if>
-                <if test="mId != null and mId != ''">and m_id =
-                    #{mId}
-                </if>
-                <if test="inOrOut != null and inOrOut != ''">and in_or_out = #{inOrOut}</if>
-                <if test="beginTime != null and beginTime != ''">
-                    AND date_format(t_date,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
-                </if>
-                <if test="endTime != null and endTime != '' ">
-                    AND date_format(t_date,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
-                </if>
-            </if>
-        </where>
-        group by ${groupby}
-    </select>
+            </where>
+            GROUP BY
+            <foreach item="selectParam" collection="selectParams" separator=",">
+                #{selectParam}
+            </foreach>
+        </select>
+<!--    <select id="selectTransactionRecordStatisticsGroupList" parameterType="java.util.Map"-->
+<!--            resultMap="TransactionRecordStatisticsResult">-->
+<!--        select ${groupfield} from transaction_record tr-->
+<!--        <where>-->
+<!--            <if test="params != null">-->
+<!--                <if test="cId != null and cId != ''">and c_id =-->
+<!--                    #{cId}-->
+<!--                </if>-->
+<!--                <if test="mId != null and mId != ''">and m_id =-->
+<!--                    #{mId}-->
+<!--                </if>-->
+<!--                <if test="inOrOut != null and inOrOut != ''">and in_or_out = #{inOrOut}</if>-->
+<!--                <if test="beginTime != null and beginTime != ''">-->
+<!--                    AND date_format(t_date,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')-->
+<!--                </if>-->
+<!--                <if test="endTime != null and endTime != '' ">-->
+<!--                    AND date_format(t_date,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')-->
+<!--                </if>-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        group by ${groupby}-->
+<!--    </select>-->
 
 </mapper>
         <!--<?xml version="1.0" encoding="UTF-8" ?>-->
