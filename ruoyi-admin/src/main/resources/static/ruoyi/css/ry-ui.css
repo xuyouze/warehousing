@@ -1186,7 +1186,11 @@ table.rc-table-resizing thead > th > a {
 .mytable {
 	margin: 0px auto;
 	table-layout: fixed;
+
 }
 .mytable th{
 	text-align: center;
+}
+.mytable td{
+	padding: 2px;
 }

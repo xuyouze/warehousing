@@ -21,7 +21,7 @@
                             </select>
                         </li>
                         <li class="select-time">
-                            <label>出入库时间：</label>
+                            <label>创建时间:</label>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
                                    name="params[beginTime]"/>
                             <span>-</span>
@@ -89,7 +89,10 @@
                 {
                     field: 'tId',
                     title: '交易单ID',
-                    // visible: false
+                    // visible: false,
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
                 {
                     field: 'manufacturerName',
@@ -109,7 +112,19 @@
                 },
                 {
                     field: 'remark',
-                    title: '备注信息'
+                    title: '备注信息',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value);
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+
+                {
+                    field: 'createBy',
+                    title: '创建者'
                 },
                 {
                     title: '操作',

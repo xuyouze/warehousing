@@ -1502,7 +1502,48 @@
 <!--	    });-->
 <!--    </script>-->
 <!--</body>-->
-<body>
+<body class="gray-bg">
+<div class="container-div">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="height:400px"></div>
+</div>
+<div th:include="include :: footer"></div>
+
+<script th:src="@{/js/plugins/echarts/echarts.min.js}"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "finance/budgetChart";
+    var myChart = echarts.init(document.getElementById("main"));
+    var option = {
+        tooltip: {
+            show: true
+        },
+        series : [
+            {
+                "name":"销量",
+                "type":"bar",
+                "data":[5, 20, 40, 10, 10, 20]
+            }
+        ],
+        xAxis : [
+            {
+                data : ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"],
+                type : 'category'
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ]
+    };
+
+    function showChart(){
+        myChart.clear();
+        // myChart.showLoading({text:'正在努力加载。。。'});
+        myChart.setOption(option );
+    }
+    showChart();
+</script>
 </body>
 
 </html>

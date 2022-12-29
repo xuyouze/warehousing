@@ -94,4 +94,14 @@ public class TransactionRecordServiceImpl implements ITransactionRecordService
     {
         return transactionRecordMapper.deleteTransactionRecordByTrId(trId);
     }
+
+    @Override
+    public TransactionRecord selectTransactionRecordBycId(String cIds) {
+        return transactionRecordMapper.selectTransactionRecordBycId(Convert.toStrArray(cIds));
+    }
+
+    @Override
+    public TransactionRecord selectTransactionRecordBymId(String mIds) {
+        return transactionRecordMapper.selectTransactionRecordBymId(Convert.toStrArray(mIds));
+    }
 }

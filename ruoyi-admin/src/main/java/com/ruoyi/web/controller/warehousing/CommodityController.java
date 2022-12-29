@@ -2,8 +2,10 @@ package com.ruoyi.web.controller.warehousing;
 
 import java.util.List;
 
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.warehousing.domain.Commodity;
 import com.ruoyi.warehousing.service.ICommodityService;
+import com.ruoyi.warehousing.service.ITransactionRecordService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,9 @@ public class CommodityController extends BaseController
 
     @Autowired
     private ICommodityService commodityService;
+
+    @Autowired
+    private ITransactionRecordService iTransactionRecordService;
 
     @RequiresPermissions("warehousing:commodity:view")
     @GetMapping()
@@ -125,6 +130,9 @@ public class CommodityController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(commodityService.deleteCommodityByCIds(ids));
+        if (iTransactionRecordService.selectTransactionRecordBycId(ids) == null){
+            return toAjax(commodityService.deleteCommodityByCIds(ids));
+        }
+        return error("请删除对应的商品出入记录");
     }
 }

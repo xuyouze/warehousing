@@ -67,7 +67,10 @@
                 {
                     field: 'cId',
                     title: '商品ID',
-                    visible: true
+                    visible: true,
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
                 {
                     field: 'commodityName',
@@ -75,7 +78,10 @@
                 },
                 {
                     field: 'remark',
-                    title: '备注信息'
+                    title: '备注信息',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value);
+                    }
                 },
                 {
                     field: 'createTime',
@@ -85,6 +91,15 @@
                 {
                     field: 'createBy',
                     title: '创建者'
+                },
+                {
+                    field: 'updateTime',
+                    title: '更新时间'
+                },
+
+                {
+                    field: 'updateBy',
+                    title: '更新者'
                 },
                 {
                     title: '操作',

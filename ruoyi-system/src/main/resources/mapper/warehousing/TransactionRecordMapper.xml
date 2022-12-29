@@ -163,4 +163,22 @@
         </foreach>
     </delete>
 
+
+    <select id="selectTransactionRecordBycId" parameterType="String" resultMap="TransactionRecordResult">
+        <include refid="selectTransactionRecordVo"/>
+        where tr.c_id in
+        <foreach item="cId" collection="array" open="(" separator="," close=")">
+            #{cId}
+        </foreach>
+        limit 1
+    </select>
+
+    <select id="selectTransactionRecordBymId" parameterType="String" resultMap="TransactionRecordResult">
+        <include refid="selectTransactionRecordVo"/>
+        where tr.m_id in
+        <foreach item="mId" collection="array" open="(" separator="," close=")">
+            #{mId}
+        </foreach>
+        limit 1
+    </select>
 </mapper>

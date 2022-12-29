@@ -19,6 +19,10 @@ public interface ITransactionRecordService
      */
     public TransactionRecord selectTransactionRecordByTrId(Long trId);
 
+    public TransactionRecord selectTransactionRecordBycId(String cIds);
+
+    public TransactionRecord selectTransactionRecordBymId(String mIds);
+
     /**
      * 查询transaction_record列表
      * 

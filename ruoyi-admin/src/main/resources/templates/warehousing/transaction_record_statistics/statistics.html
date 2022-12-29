@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('流转记录统计列表')"/>
+    <th:block th:include="include :: header('统计列表')"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -11,7 +11,7 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            商品名称：
+                            商品名称:
                             <select name="cId">
                                 <option value="">所有商品</option>
                                 <option th:each="commodity: ${commodityList}"
@@ -20,7 +20,7 @@
                             </select>
                         </li>
                         <li>
-                            厂家名称：
+                            厂家名称:
                             <select name="mId">
                                 <option value="">所有厂家</option>
                                 <option th:each="manufacturer: ${manufacturerList}"
@@ -29,11 +29,11 @@
                             </select>
                         </li>
                         <li>
-                            颜色：
+                            颜色:
                             <input type="text" name="color"/>
                         </li>
                         <li>
-                            操作状态：
+                            操作状态:
                             <select name="inOrOut" th:with="type=${@dict.getType('warehousing_status')}">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -41,8 +41,7 @@
                             </select>
                         </li>
                         <li class="select-time">
-                            <label>出入库时间：</label>
-
+                            <label>创建时间:</label>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
                                    name="beginTime"/>
                             <span>-</span>

@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.warehousing;
 
 import java.util.List;
+
+import com.ruoyi.warehousing.service.ITransactionRecordService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,9 @@ public class ManufacturerController extends BaseController
 
     @Autowired
     private IManufacturerService manufacturerService;
+
+    @Autowired
+    private ITransactionRecordService iTransactionRecordService;
 
     @RequiresPermissions("warehousing:manufacturer:view")
     @GetMapping()
@@ -125,6 +130,10 @@ public class ManufacturerController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(manufacturerService.deleteManufacturerByMIds(ids));
+        if (iTransactionRecordService.selectTransactionRecordBymId(ids) == null){
+            return toAjax(manufacturerService.deleteManufacturerByMIds(ids));
+        }
+        return error("请删除对应的厂家出入记录");
+
     }
 }

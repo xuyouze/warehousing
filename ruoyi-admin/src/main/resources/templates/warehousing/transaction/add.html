@@ -22,7 +22,7 @@
             <label class="col-sm-3 control-label is-required">交易日期：</label>
             <div class="col-sm-8">
                 <div class="input-group date">
-<!--                    <input type="text" class="time-input" placeholder="请选择交易日期" name="tDate"/>-->
+                    <!--                    <input type="text" class="time-input" placeholder="请选择交易日期" name="tDate"/>-->
                     <input name="tDate" class="form-control time-input" placeholder="yyyy-MM-dd" type="text"
                            th:value="${today_date}">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
@@ -38,170 +38,172 @@
                 </select>
             </div>
         </div>
-
-        <div class="col-sm-8 select-table ">
-            <table id="bootstrap-table" class="mytable">
-                <thead>
-                <tr>
-                    <th> 商品名称</th>
-                    <th> 数量</th>
-                    <th> 单位</th>
-                    <th> 颜色</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <div class="col-sm-15">
-                            <select name="cId" class="form-control col-sm-5">
-                                <option value=""></option>
-                                <option th:each="commodity: ${commodityList}"
-                                        th:text="${commodity['commodityName']}"
-                                        th:value="${commodity['cId']}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="amount" class="form-control" type="text">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictLabel}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="color" class="form-control" type="text">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col-sm-15">
-                            <select name="cId" class="form-control col-sm-5">
-                                <option value=""></option>
-                                <option th:each="commodity: ${commodityList}"
-                                        th:text="${commodity['commodityName']}"
-                                        th:value="${commodity['cId']}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="amount" class="form-control" type="text">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictLabel}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="color" class="form-control" type="text">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col-sm-15">
-                            <select name="cId" class="form-control col-sm-5">
-                                <option value=""></option>
-                                <option th:each="commodity: ${commodityList}"
-                                        th:text="${commodity['commodityName']}"
-                                        th:value="${commodity['cId']}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="amount" class="form-control" type="text">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictLabel}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="color" class="form-control" type="text">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col-sm-15">
-                            <select name="cId" class="form-control col-sm-5">
-                                <option value=""></option>
-                                <option th:each="commodity: ${commodityList}"
-                                        th:text="${commodity['commodityName']}"
-                                        th:value="${commodity['cId']}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="amount" class="form-control" type="text">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictLabel}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="color" class="form-control" type="text">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="col-sm-15">
-                            <select name="cId" class="form-control col-sm-5">
-                                <option value=""></option>
-                                <option th:each="commodity: ${commodityList}"
-                                        th:text="${commodity['commodityName']}"
-                                        th:value="${commodity['cId']}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="amount" class="form-control" type="text">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictLabel}"></option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-sm-12">
-                            <input name="color" class="form-control" type="text">
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">交易明细：</label>
+            <div class="col-sm-8">
+                <table id="bootstrap-table" class="mytable">
+                    <thead>
+                    <tr>
+                        <th> 商品名称</th>
+                        <th> 数量</th>
+                        <th> 单位</th>
+                        <th> 颜色</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="col-sm-15">
+                                <select name="cId" class="form-control col-sm-5">
+                                    <option value=""></option>
+                                    <option th:each="commodity: ${commodityList}"
+                                            th:text="${commodity['commodityName']}"
+                                            th:value="${commodity['cId']}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="amount" class="form-control" type="text">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictLabel}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="color" class="form-control" type="text">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="col-sm-15">
+                                <select name="cId" class="form-control col-sm-5">
+                                    <option value=""></option>
+                                    <option th:each="commodity: ${commodityList}"
+                                            th:text="${commodity['commodityName']}"
+                                            th:value="${commodity['cId']}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="amount" class="form-control" type="text">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictLabel}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="color" class="form-control" type="text">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="col-sm-15">
+                                <select name="cId" class="form-control col-sm-5">
+                                    <option value=""></option>
+                                    <option th:each="commodity: ${commodityList}"
+                                            th:text="${commodity['commodityName']}"
+                                            th:value="${commodity['cId']}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="amount" class="form-control" type="text">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictLabel}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="color" class="form-control" type="text">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="col-sm-15">
+                                <select name="cId" class="form-control col-sm-5">
+                                    <option value=""></option>
+                                    <option th:each="commodity: ${commodityList}"
+                                            th:text="${commodity['commodityName']}"
+                                            th:value="${commodity['cId']}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="amount" class="form-control" type="text">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictLabel}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="color" class="form-control" type="text">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="col-sm-15">
+                                <select name="cId" class="form-control col-sm-5">
+                                    <option value=""></option>
+                                    <option th:each="commodity: ${commodityList}"
+                                            th:text="${commodity['commodityName']}"
+                                            th:value="${commodity['cId']}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="amount" class="form-control" type="text">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <select name="unit" th:with="type=${@dict.getType('commodity_unit')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictLabel}"></option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-12">
+                                <input name="color" class="form-control" type="text">
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="form-group">
@@ -220,12 +222,14 @@
         focusCleanup: true,
         rules: {
             amount: {
-                digits: true
+                number: true
             }
         }
     });
 
     function submitHandler() {
+        const reg=/^[0-9]+.?[0-9]*$/; //判断字符串是否为数字 ，判断正整数用/^[1-9]+[0-9]*]*$/
+
         if ($.validate.form()) {
             let lists = [];
             // 获取每行的结果
@@ -239,9 +243,14 @@
                     obj["color"] = $(trList[i]).find("input[name='color']").val()
                     obj["amount"] = $(trList[i]).find("input[name='amount']").val()
                     lists.push(obj)
+                    // console.log(obj["amount"])
+                    if(!reg.test(obj["amount"])){
+                        $.modal.alertWarning('数量列必须为正数');
+                        return
+                    }
                 }
             }
-            if (lists.length === 0){
+            if (lists.length === 0) {
                 $.modal.alertWarning('请保存至少一条数据');
                 return
             }

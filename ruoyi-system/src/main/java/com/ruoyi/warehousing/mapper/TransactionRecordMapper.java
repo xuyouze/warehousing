@@ -65,5 +65,7 @@ public interface TransactionRecordMapper
 
 //    public long selectCountTransactionRecordBytIds(String[] tIds);
 
+    public TransactionRecord selectTransactionRecordBycId(String[] cIds);
+    public TransactionRecord selectTransactionRecordBymId(String[] mIds);
 
 }

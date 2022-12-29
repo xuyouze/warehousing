@@ -11,7 +11,8 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <label>商品名称:</label><select name="cId" class="form-control">
+                            <label>商品名称:</label>
+                            <select name="cId" class="form-control">
                             <option value="">所有商品</option>
                             <option th:each="commodity: ${commodityList}"
                                     th:text="${commodity['commodityName']}"
@@ -19,7 +20,7 @@
                         </select>
                         </li>
                         <li>
-                            <label>厂家名称:</label>
+                            <label>厂家名称：</label>
                             <select id="mId" name="mId" class="form-control">
                                 <option value="">所有厂家</option>
                                 <option th:each="manufacturer: ${manufacturerList}"
@@ -28,11 +29,12 @@
                             </select>
                         </li>
                         <li>
-                            <label>颜色：</label><input type="text" name="color"/>
+                            颜色:
+                            <input type="text" name="color"/>
                         </li>
 
                         <li>
-                            <label>操作状态：</label>
+                            操作状态:
                             <select name="inOrOut"
                                     th:with="type=${@dict.getType('warehousing_status')}">
                                 <option value="">所有</option>
@@ -41,7 +43,7 @@
                             </select>
                         </li>
                         <li class="select-time">
-                            <label>出入库时间：</label>
+                            <label>创建时间:</label>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
                                    name="params[beginTime]"/>
                             <span>-</span>
@@ -103,7 +105,10 @@
                 {
                     field: 'trId',
                     title: '交易记录ID',
-                    visible: false
+                    visible: true,
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
                 {
                     field: 'commodityName',
@@ -144,7 +149,10 @@
                 },
                 {
                     field: 'remark',
-                    title: '备注信息'
+                    title: '备注信息',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value);
+                    }
                 },
                 {
                     title: '操作',
